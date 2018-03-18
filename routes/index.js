@@ -1,8 +1,11 @@
 var express = require('express');
 var twilio = require('twilio');
-var sqlite3=require('sqlite3').verbose();
+var sqlite3 = require('sqlite3').verbose();
 var router = express.Router();
-var connectdb=require('../bin/db_connect');
+var connectdb = require('../bin/db_connect');
+var postid = require("../bin/Posts");
+
+
 // var db = new sqlite3.Database('./db/text2buy.db');
  
  // let db = new sqlite3.Database('./db/text2buy.db');
@@ -79,6 +82,11 @@ var messages=connectdb.test(function(data){
 	console.log(data);
 });
 
+
+var search=JSON.parse("{\"query\":\"cars\",\"city\":\"san jose\"}");
+var messages=connectdb.search(search, function(data){
+	console.log(data);
+});
 
 
 // //------------------------------------------------
