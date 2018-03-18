@@ -37,7 +37,7 @@ var tester={
 	},
 	"post_items":function(data,callback){
 		let db = new sqlite3.Database('./db/text2buy.db');
-		var description=data.description+"-->phone number:"+data.phone;
+		var description=data.description+"Phone Number:"+data.phone;
 		var query_post=`INSERT INTO posts(uaid,title,description,price,city,expireson,created,modified) values(65,"${data.title}","${description}","${data.price}","${data.city}",'datetime()','datetime()','datetime()')`;
 		db.run(query_post,function(err){
  			console.log(err);

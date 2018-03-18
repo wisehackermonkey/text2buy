@@ -7,6 +7,12 @@ var connectdb=require('../bin/db_connect');
 let parser = require('../bin/parser');
 let Postid = require("../bin/Posts");
 
+console.log(
+`Text2Buy - SMS to Item Postings Board (Like Craigslist)
+-------------------
+Server Has Started
+-------------------
+`);
 
 router.get('/', function(req, res, next){
    	let message_data = JSON.parse(req.query.message_data);
@@ -21,8 +27,11 @@ router.get('/', function(req, res, next){
 		 var messages = connectdb.get_post_desc({"postid":search},function(data){
                                 console.log(data);
 				data = data[0];
-				let responseMsg = "@"+data.postid+"\n"+data.title.toUpperCase()+"\n\n"+data.description+"\n\n$"+
-							data.price+"\n"+data.city;
+				let responseMsg = "@"+  data.postid+"\n"+
+								   ""+	data.title.toUpperCase()+"\n\n"+
+								   ""+	data.description+"\n\n$"+
+								   ""+	data.price+"\n"+
+								   ""+	data.city;
 				res.send(responseMsg);
                         });
 	}else if(dbRequest.query && dbRequest.city) {
@@ -31,7 +40,10 @@ router.get('/', function(req, res, next){
 			console.log(data);
 			let postList = "";
 	    	data.forEach(function(post, index){
-	    		let template = `#${post.postid} Title: ${post.title}, Price: $ ${post.price}`;
+								// todo add body of sms
+	    		let template =  `#${post.postid}` + '\n'+
+	    						`Title: ${post.title},`+ '\n'+
+	    						`Price: $ ${post.price}`;
 	    		postList += template + '\n';
 	    	});
 			res.send(postList);
