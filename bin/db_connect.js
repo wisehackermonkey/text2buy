@@ -37,13 +37,37 @@ var tester={
 	"post_items":function(data,callback){
 		let db = new sqlite3.Database('./db/text2buy.db');
 		var description=data.description+"-->phone number:"+data.phone;
-		var query_post=`INSERT INTO posts(uaid,title,description,price,city,expireson,created,modified) values(65,"${data.title}","${description}","${data.price}","${data.city}",'datetime()','datetime()','datetime()')`;
-		db.run(query_post,function(err){
- 			console.log(err);
- 			var json_data=[{"msg":"successfully added"}];
- 			callback(json_data);
- 			db.close();
- 		});
+		var date1=new Date();
+		var date=new Date();
+		var newDate = new Date(date.setTime( date.getTime() + 7 * 86400000 ));
+		var query_get_uid=`SELECT uaid from users WHERE phone="${data.phone}"`;
+		db.all(query_get_uid,function(err,data1){
+			if(data1.length){
+				var query_post=`INSERT INTO posts(uaid,title,description,price,city,expireson,created,modified) values("${data1[0].uaid}","${data.title}","${description}","${data.price}","${data.city}","${newDate}","${date1}","${date1}")`;
+				db.run(query_post,function(err){
+		 			console.log(err);
+		 			var json_data=[{"msg":"successfully added"}];
+		 			callback(json_data);
+		 			db.close();
+		 		});
+		 	}
+		 	else{
+		 		var query_create_user=`INSERT INTO users(name,phone) VALUES ("${data.name}","${data.phone}")`;
+		 		db.run(query_create_user,function(err){
+		 			console.log(err);
+		 			db.all(query_get_uid,function(err,data1){
+		 				console.log(err);
+		 				var query_post=`INSERT INTO posts(uaid,title,description,price,city,expireson,created,modified) values("${data1[0].uaid}","${data.title}","${description}","${data.price}","${data.city}","${newDate}","${date1}","${date1}")`;
+						db.run(query_post,function(err){
+				 			console.log(err);
+				 			var json_data=[{"msg":"successfully added"}];
+				 			callback(json_data);
+				 			db.close();
+				 		});			
+		 			});
+		 		});
+		 	}
+	 	});
 	}
 };
 

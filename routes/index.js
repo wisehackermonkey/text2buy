@@ -23,7 +23,7 @@ var messages=connectdb.get_post_desc(post_search,function(data){
 	console.log(data);
 });
 
-var post=JSON.parse("{\"phone\":\"+1111110000\",\"name\":\"xyzabc\",\"title\":\"cars\",\"description\":\"a good cars\",\"price\":22,\"city\":\"san jose\"}");
+var post=JSON.parse("{\"phone\":\"+12222243551\",\"name\":\"xyzaasbc\",\"title\":\"bikes\",\"description\":\"a gosadasdadod bike\",\"price\":22,\"city\":\"san jose\"}");
 var messages=connectdb.post_items(post,function(data){
 	console.log(data);
 });
