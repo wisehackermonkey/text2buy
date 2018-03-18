@@ -10,13 +10,21 @@ let Postid = require("../bin/Posts");
 
 router.get('/', function(req, res, next){
    	let message_data = JSON.parse(req.query.message_data);
-
-	let dbRequest = parser(message_data);
+	console.log(message_data.Body);
+	try {let dbRequest = parser(message_data);
+	} catch(error) {
+	}
 	// Check if the sms message comming in is a post number quest
-	if(message_data.Body.charAt(0) === "#"){
+	if(message_data.Body.charAt(0) === "@"){
 		let search = Postid.get(message_data.Body);
-		console.log(search);
-		res.send(search);
+		console.log("This: "+search);
+		 var messages = connectdb.get_post_desc({"postid":search},function(data){
+                                console.log(data);
+				data = data[0];
+				let responseMsg = "@"+data.postid+"\n"+data.title.toUpperCase()+"\n\n"+data.description+"\n\n$"+
+							data.price+"\n"+data.city;
+				res.send(responseMsg);
+                        });
 	}else if(dbRequest.query && dbRequest.city) {
 
 		let messages=connectdb.search(dbRequest, function(data){
