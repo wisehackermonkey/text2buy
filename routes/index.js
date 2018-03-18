@@ -2,6 +2,7 @@ var express = require('express');
 var twilio = require('twilio');
 var sqlite3=require('sqlite3').verbose();
 var router = express.Router();
+var connectdb=require('../bin/db_connect');
 // var db = new sqlite3.Database('./db/text2buy.db');
  
  // let db = new sqlite3.Database('./db/text2buy.db');
@@ -73,15 +74,9 @@ db.close();
 */
 
 ///a tester function
-
-let db = new sqlite3.Database('./db/text2buy.db');
-var query=`SELECT * FROM posts`;
-
-// var query_user="select * from posts";
-db.all(query,function(err,row){
-	console.log(err,row);
-// console.log(JSON.stringify(this));
-db.close();
+console.log("connecting to db");
+var messages=connectdb.test(function(data){
+	console.log(data);
 });
 
 
