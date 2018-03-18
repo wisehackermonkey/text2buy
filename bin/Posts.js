@@ -9,16 +9,11 @@ var getIDPosts = {
 
 			var id_num = id_num.remove("#","");
 
-			var post_list = [];
 
 			var messages = connectdb.get_post_desc(`{"postid":${id_num}}`,function(data){
-				// callback(data)
-				test+=data;
-
-				// console.log(data);
+				console.log(JSON.stringify(data));
+				return data;
 			});
-
-			return post_list;
 		}else{
 			console.log("Post ID was not found!!");
 		}

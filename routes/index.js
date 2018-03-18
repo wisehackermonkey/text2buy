@@ -5,15 +5,19 @@ var router = express.Router();
 var connectdb=require('../bin/db_connect');
 
 let parser = require('../bin/parser');
-let postid = require("../bin/Posts");
+let Postid = require("../bin/Posts");
 
 
 router.get('/', function(req, res, next){
    	let message_data = JSON.parse(req.query.message_data);
 
 	let dbRequest = parser(message_data);
-
-	if(dbRequest.query && dbRequest.city) {
+	// Check if the sms message comming in is a post number quest
+	if(message_data.Body.charAt(0) === "#"){
+		let search = Postid.get(message_data.Body);
+		console.log(search);
+		res.send(search);
+	}else if(dbRequest.query && dbRequest.city) {
 
 		let messages=connectdb.search(dbRequest, function(data){
 			console.log(data);
