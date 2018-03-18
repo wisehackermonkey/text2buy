@@ -27,11 +27,11 @@ router.get('/', function(req, res, next){
 		// ** Request to get more detail on specific post
 		request_type = "post_detail";
 	}    
-    else if(message_data.Body.substring(0,3).toLowerCase() == 'add') {
+    if(message_data.Body.substring(0,3).toLowerCase() == 'add') {
     	// ** Request to add new posts
     	request_type = "post_add";
     }
-    else if(typeof(dbRequest.query) != undefined && typeof(dbRequest.city) != undefined) {
+    if(typeof(dbRequest.query) != null && typeof(dbRequest.city) != null) {
     	// ** Request to get recent posts for perticular keyword
     	request_type = "post_query";
 	}
@@ -139,16 +139,6 @@ var query_post = function(req, res, next){
 
 var handle_invalid_request = function(req, res, next){
 
-   	let message_data = JSON.parse(req.query.message_data);
-    let dbRequest;
-
-	try {
-		dbRequest = parser(message_data);
-	} 
-	catch(error) {
-		console.log(error);
-	}
-	
     let helpString = "invalid entry. Plese type one of the following commands:\n";
     helpString += "-> Query: <query-string>, city:<city>\n";
     helpString += "-> @<post-id>\n";
