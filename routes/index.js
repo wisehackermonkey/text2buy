@@ -25,11 +25,13 @@ router.get('/', function(req, res, next){
 							data.price+"\n"+data.city;
 				res.send(responseMsg);
                         });
-	}    else if(message_data.Body.substring(0,2).toLowerCase() === 'Add'.toLowerCase()) {
+	}    
+    else if(message_data.Body.substring(0,3).toLowerCase() == 'add') {
+		console.log("Tring to add");
 
             let newPost = message_data.Body.replace("Add:", "");
             // let TestString = "Add: title:Buy House, description: Nice House, Name: Uzair, price: 900000, city: San Francisco";
-            let newPost = TestString.replace("Add:", "");
+            // let newPost = TestString.replace("Add:", "");
             let tokens = newPost.split(',');
             let Title =  tokens[0].split(':');
             let Description = tokens[1].split(':');
@@ -39,25 +41,26 @@ router.get('/', function(req, res, next){
             Price = parseInt(Price[1].trim());
             let City = tokens[4].split(':');
             dbNewPostObj = {
-                title: Title[1],
-                description: Description[1],
-                phone: Phone,
+                title: Title[1].trim(),
+                description: Description[1].trim(),
+                phone: Phone.trim(),
                 name: Name[1],
                 price:  Price,
-                city: City[1]
+                city: City[1].trim()
             }
+
+		console.log(dbNewPostObj);
 
             var messages=connectdb.post_items(dbNewPostObj,function(data){
             		console.log(data[0].msg);
+                    res.send(data[0].msg);
             });
-
-
 
 
         }
         else if(typeof(dbRequest.query) != undefined && typeof(dbRequest.city) != undefined) {
 
-
+		console.log("last if entered");
 		    let messages=connectdb.search(dbRequest, function(data){
 			console.log(data);
 			let postList = "";

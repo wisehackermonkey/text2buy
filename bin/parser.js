@@ -11,6 +11,8 @@ let parse = messageObject => {
         city: tokens[2],
     }
 
+	console.log(dbRequestObject);
+
     return dbRequestObject;
 
 }
