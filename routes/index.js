@@ -110,4 +110,14 @@ var messages=connectdb.test(function(data){
  res.render('index', { title: 'Express' });
 });
 
+router.get('/testing', function(req, res, next){ 
+   	var message_data = JSON.parse(req.query.message_data);
+   	// res.send("Thank you for requesting posts for : " + message_data.Body);
+    var messages=connectdb.test(function(data){
+    	// TODO: formate data into userfriendly
+		res.send(data);
+	});
+
+});
+
 module.exports = router;

@@ -2,7 +2,7 @@ var sqlite3=require('sqlite3').verbose();
 
 var tester={"test":function(callback){
 	let db = new sqlite3.Database('./db/text2buy.db');
-	var query=`SELECT * FROM posts`;
+	var query=`SELECT postid, title, price FROM posts`;
 	db.all(query,function(err,row){
 		//console.log(err,row);
 		db.close();
