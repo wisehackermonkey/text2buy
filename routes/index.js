@@ -11,13 +11,13 @@ let Postid = require("../bin/Posts");
 router.get('/', function(req, res, next){
    	let message_data = JSON.parse(req.query.message_data);
 	console.log(message_data.Body);
-	try {let dbRequest = parser(message_data);
+    let dbRequest;
+	try {dbRequest = parser(message_data);
 	} catch(error) {
 	}
 	// Check if the sms message comming in is a post number quest
 	if(message_data.Body.charAt(0) === "@"){
 		let search = Postid.get(message_data.Body);
-		console.log("This: "+search);
 		 var messages = connectdb.get_post_desc({"postid":search},function(data){
                                 console.log(data);
 				data = data[0];
@@ -25,9 +25,40 @@ router.get('/', function(req, res, next){
 							data.price+"\n"+data.city;
 				res.send(responseMsg);
                         });
-	}else if(dbRequest.query && dbRequest.city) {
+	}    else if(message_data.Body.substring(0,2).toLowerCase() === 'Add'.toLowerCase()) {
 
-		let messages=connectdb.search(dbRequest, function(data){
+            let newPost = message_data.Body.replace("Add:", "");
+            // let TestString = "Add: title:Buy House, description: Nice House, Name: Uzair, price: 900000, city: San Francisco";
+            let newPost = TestString.replace("Add:", "");
+            let tokens = newPost.split(',');
+            let Title =  tokens[0].split(':');
+            let Description = tokens[1].split(':');
+            let Phone = message_data.From;
+            let Name = tokens[2].split(':');
+            let Price = tokens[3].split(':');
+            Price = parseInt(Price[1].trim());
+            let City = tokens[4].split(':');
+            dbNewPostObj = {
+                title: Title[1],
+                description: Description[1],
+                phone: Phone,
+                name: Name[1],
+                price:  Price,
+                city: City[1]
+            }
+
+            var messages=connectdb.post_items(dbNewPostObj,function(data){
+            		console.log(data[0].msg);
+            });
+
+
+
+
+        }
+        else if(typeof(dbRequest.query) != undefined && typeof(dbRequest.city) != undefined) {
+
+
+		    let messages=connectdb.search(dbRequest, function(data){
 			console.log(data);
 			let postList = "";
 	    	data.forEach(function(post, index){
@@ -38,6 +69,14 @@ router.get('/', function(req, res, next){
 		});
 
 	}
+    else {
+        let helpString = "invalid entry. Plese type one of the following commands:\n";
+        helpString += "-> Query: <query-string>, city:<city>\n";
+        helpString += "-> @<post-id>\n";
+        helpString += "> Add: title: <title>, description: <description>, name: <name>, price: <price>, city: <city>";
+        res.send(helpString);
+    }
+
 
    	// res.send("Thank you for requesting posts for : " + message_data.Body);
     // var messages=connectdb.test(function(data){
