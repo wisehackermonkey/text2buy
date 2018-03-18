@@ -115,7 +115,12 @@ router.get('/testing', function(req, res, next){
    	// res.send("Thank you for requesting posts for : " + message_data.Body);
     var messages=connectdb.test(function(data){
     	// TODO: formate data into userfriendly
-		res.send(data);
+    	let postList = "";
+    	data.forEach(function(post, index){
+    		let template = `#${post.postid} Title: ${post.title}, Price: $ ${post.price}`;
+    		postList += template + '\n';
+    	})
+		res.send(postList);
 	});
 
 });
