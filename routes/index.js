@@ -3,10 +3,12 @@ var twilio = require('twilio');
 var sqlite3=require('sqlite3').verbose();
 var router = express.Router();
 var connectdb=require('../bin/db_connect');
+let parser=require('../bin/parser');
+
 // var db = new sqlite3.Database('./db/text2buy.db');
- 
+
  // let db = new sqlite3.Database('./db/text2buy.db');
- 
+
  /*router.get('/text2buy', function(req, res, next) {
   // insert one row into the langs table
   db.all('SELECT * FROM users', function(err,row) {
@@ -21,7 +23,7 @@ var connectdb=require('../bin/db_connect');
 		console.log(`${err}`)
 	}
   });
- 
+
   // close the database connection
   // db.close();
   res.render('index', { title: 'Express' });
@@ -88,7 +90,7 @@ var messages=connectdb.test(function(data){
 // 	/*
 // 	get the message
 
-	
+
 // 	if message is does not have #
 // 	{
 // 		if the message include add: {
@@ -100,18 +102,21 @@ var messages=connectdb.test(function(data){
 // 			repond with the titles
 // 		}
 // 	}
-	
+
 // 	if message has #
 
-// 	search the item with this id and provide the desciption 
+// 	search the item with this id and provide the desciption
 // 	*/
 
-// 	//provide the response in 
+// 	//provide the response in
  res.render('index', { title: 'Express' });
 });
 
-router.get('/testing', function(req, res, next){ 
+router.get('/testing', function(req, res, next){
    	var message_data = JSON.parse(req.query.message_data);
+
+    // let dbRequestObject = parser(message_data);
+
    	// res.send("Thank you for requesting posts for : " + message_data.Body);
     var messages=connectdb.test(function(data){
     	// TODO: formate data into userfriendly
