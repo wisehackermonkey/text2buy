@@ -31,7 +31,6 @@ var tester={
 		db.all(query,function(err,row){
 			console.log(err);
 			callback(row);
-		// console.log(JSON.stringify(this));
 			db.close();
 		});
 	},
